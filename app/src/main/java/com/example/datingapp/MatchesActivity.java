@@ -6,10 +6,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchesActivity extends AppCompatActivity {
+
+    private BottomNavigationView bottomNavigationView;
+
+    private FirebaseAuth mAuth;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mMatchesAdapter;
     private RecyclerView.LayoutManager mMatchesLayoutManager;
@@ -53,6 +61,31 @@ public class MatchesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 finish();
                 return;
+            }
+        });
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.settings:
+                        Intent intent1 = new Intent(MatchesActivity.this, SettingsActivity.class);
+                        startActivity(intent1);
+                        return true;
+                    case R.id.matches:
+                        Intent intent2 = new Intent(MatchesActivity.this, MatchesActivity.class);
+                        startActivity(intent2);
+                        return true;
+                    case R.id.logout:
+                        mAuth.signOut();
+                        Intent intent3 = new Intent(MatchesActivity.this, ChooseLoginRegistrationActivity.class);
+                        startActivity(intent3);
+                        finish();
+                        return true;
+                    default:
+                        return false;
+                }
             }
         });
 

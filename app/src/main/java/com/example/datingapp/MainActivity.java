@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -29,6 +32,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     AirplaneModeChangeReceiver airplaneModeChangeReceiver = new AirplaneModeChangeReceiver();
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onStart() {
@@ -123,6 +127,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.settings:
+                        Intent intent1 = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(intent1);
+                        return true;
+                    case R.id.matches:
+                        Intent intent2 = new Intent(MainActivity.this, MatchesActivity.class);
+                        startActivity(intent2);
+                        return true;
+                    case R.id.logout:
+                        mAuth.signOut();
+                        Intent intent3 = new Intent(MainActivity.this, ChooseLoginRegistrationActivity.class);
+                        startActivity(intent3);
+                        finish();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
     }
 
     private void isMatch(String userId) {
@@ -202,26 +231,6 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-    }
-
-    public void logoutUser(View view) {
-        mAuth.signOut();
-        Intent intent = new Intent(MainActivity.this, ChooseLoginRegistrationActivity.class);
-        startActivity(intent);
-        finish();
-        return;
-    }
-
-    public void settingsButton(View view) {
-        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-        startActivity(intent);
-        return;
-    }
-
-    public void matchesButton(View view) {
-        Intent intent = new Intent(MainActivity.this, MatchesActivity.class);
-        startActivity(intent);
-        return;
     }
 
 }

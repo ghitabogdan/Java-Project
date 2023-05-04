@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +40,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private BottomNavigationView bottomNavigationView;
 
     private EditText mNameField, mPhoneField, mDescriptionField;
 
@@ -88,6 +93,31 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 finish();
                 return;
+            }
+        });
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.settings:
+                        Intent intent1 = new Intent(SettingsActivity.this, SettingsActivity.class);
+                        startActivity(intent1);
+                        return true;
+                    case R.id.matches:
+                        Intent intent2 = new Intent(SettingsActivity.this, MatchesActivity.class);
+                        startActivity(intent2);
+                        return true;
+                    case R.id.logout:
+                        mAuth.signOut();
+                        Intent intent3 = new Intent(SettingsActivity.this, ChooseLoginRegistrationActivity.class);
+                        startActivity(intent3);
+                        finish();
+                        return true;
+                    default:
+                        return false;
+                }
             }
         });
     }
